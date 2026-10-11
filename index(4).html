@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hollow Bay | A Systems Thinking Game</title>
+<style>
+:root{--navy:#12313d;--teal:#167d80;--sea:#dff1ef;--sand:#f5efe2;--coral:#df795e;--ink:#20343b;--muted:#61757b;--paper:#fffefa;--line:#d9e3df;--gold:#e9bd63;--green:#2d7d62;--red:#b94f43}
+*{box-sizing:border-box}body{margin:0;background:#edf3f0;color:var(--ink);font:16px/1.5 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+button,select,input,textarea{font:inherit}button{cursor:pointer;border:0;border-radius:12px;padding:12px 17px;font-weight:700;transition:.15s}button:hover{transform:translateY(-1px)}button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid #e9bd63;outline-offset:2px}
+.primary{background:var(--teal);color:white}.secondary{background:#e6efec;color:var(--navy);border:1px solid var(--line)}.quiet{background:transparent;color:var(--muted);border:1px solid var(--line)}
+.wrap{max-width:1120px;margin:auto;padding:24px}.hero{background:var(--navy);color:white;border-radius:24px;padding:clamp(24px,5vw,52px);position:relative;overflow:hidden}
+.hero:after{content:"";position:absolute;width:340px;height:340px;border-radius:50%;right:-80px;top:-110px;border:1px solid #ffffff30;box-shadow:0 0 0 28px #ffffff0a,0 0 0 58px #ffffff08}
+.kicker{text-transform:uppercase;letter-spacing:.14em;font-size:.75rem;font-weight:800;color:#9dd8cf}.hero h1{font-size:clamp(2.1rem,5vw,3.8rem);line-height:1.02;margin:.5rem 0 1rem;max-width:720px}.hero p{max-width:690px;color:#d6e7e5;font-size:1.1rem}.hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}
+.layout{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(270px,.8fr);gap:18px;margin-top:18px}.panel{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:0 5px 18px #183a3710}.panel h2,.panel h3{margin-top:0;color:var(--navy)}h2{font-size:1.35rem}h3{font-size:1.05rem}.muted{color:var(--muted)}.small{font-size:.88rem}.tag{display:inline-block;background:var(--sea);color:#176b6c;border-radius:99px;padding:4px 10px;font-size:.78rem;font-weight:800}.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.stat{padding:14px;background:#f2f7f4;border-radius:13px}.stat span{display:block;color:var(--muted);font-size:.8rem}.stat strong{font-size:1.65rem;color:var(--navy)}.bar{height:8px;background:#dfe8e3;border-radius:99px;overflow:hidden;margin-top:7px}.bar i{display:block;height:100%;background:var(--teal);width:50%;transition:width .3s}.roundtop{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.progress{display:flex;gap:6px;margin:15px 0}.progress i{height:5px;border-radius:9px;background:#dbe5e0;flex:1}.progress i.active{background:var(--coral)}.scenario{background:var(--sand);border-radius:14px;padding:18px;margin:15px 0}.scenario strong{color:#734a30}.choices{display:grid;gap:10px}.choice{display:flex;gap:12px;align-items:flex-start;text-align:left;width:100%;background:white;border:1px solid var(--line);padding:14px;border-radius:13px;color:var(--ink)}.choice.selected{border:2px solid var(--teal);background:#eff9f7;padding:13px}.choice .letter{background:#e6efec;color:var(--navy);font-weight:900;border-radius:8px;min-width:30px;height:30px;display:grid;place-items:center}.choice strong{display:block;margin-bottom:2px}.choice small{color:var(--muted);font-size:.88rem;font-weight:400}.controls{display:flex;gap:9px;flex-wrap:wrap;margin-top:18px}.hidden{display:none!important}.feedback{padding:16px;border-radius:13px;background:#edf7f2;border-left:4px solid var(--green);margin-top:14px}.warning{background:#fff5e9;border-left-color:var(--gold)}.metrics{display:grid;gap:12px}.metric-head{display:flex;justify-content:space-between;gap:8px;font-size:.9rem}.note{background:#f5f7f5;border-radius:12px;padding:13px;margin-top:12px}.footer{color:var(--muted);font-size:.82rem;text-align:center;padding:24px}.pillrow{display:flex;gap:7px;flex-wrap:wrap}.pill{border:1px solid var(--line);border-radius:99px;padding:6px 10px;font-size:.8rem;color:var(--muted)}.archetype{border:1px solid var(--line);border-radius:12px;padding:14px;margin:9px 0}.archetype summary{font-weight:800;cursor:pointer;color:var(--navy)}.question{font-weight:800;font-size:1.1rem}.scoreline{font-size:.9rem;color:var(--muted)}textarea{width:100%;min-height:90px;border:1px solid var(--line);border-radius:12px;padding:12px;resize:vertical;background:white;color:var(--ink)}select{padding:11px;border:1px solid var(--line);border-radius:10px;background:white;color:var(--ink);max-width:100%}
+.badge{display:inline-block;border-radius:99px;padding:2px 9px;font-size:.72rem;font-weight:800;margin-left:8px;vertical-align:middle}.b-strong{background:#fbe3dd;color:#9a3b2d}.b-present{background:#fff0d6;color:#8a5a12}.b-hint{background:#e7f1ee;color:#37645a}.b-none{background:#eef1f0;color:#6a7b80}.b-good{background:#dcf1e6;color:#1f6a4c}.arch-body ul{margin:.4rem 0 .8rem;padding-left:1.1rem}.arch-body li{margin:.3rem 0}.loopbox{background:#f2f7f4;border-radius:10px;padding:10px 12px;font-size:.92rem;margin:.6rem 0}.good{color:var(--green)}.chart{width:100%;height:auto;background:#f7faf8;border:1px solid var(--line);border-radius:12px}.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:.82rem;color:var(--muted);margin-top:8px}.legend span:before{content:"";display:inline-block;width:14px;height:4px;border-radius:2px;background:var(--c);margin-right:6px;vertical-align:middle}.plan h4{margin:16px 0 4px;color:var(--navy);font-size:1rem}.plan ul,.plan ol{margin:.3rem 0 .6rem;padding-left:1.25rem}.plan li{margin:.3rem 0}
+.print-only{display:none}
+@page{margin:14mm}
+@media print{
+ *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+ body{background:#fff;font-size:11pt}
+ .wrap{max-width:none;padding:0}
+ .hero,#introLayout,#gamePanel,.footer,#debriefPanel .controls,#reflection,label[for=reflection]{display:none!important}
+ #debriefPanel{display:block!important;border:0;box-shadow:none;padding:0;margin:0!important}
+ .print-only{display:block}
+ .panel{box-shadow:none}
+ .archetype,.stat,.feedback,.note,.loopbox,.chart{break-inside:avoid}
+ h2,h3,h4{break-after:avoid}
+ .plan{break-inside:auto}
+ details>summary{list-style:none}
+ details>summary::-webkit-details-marker{display:none}
+}
+@media(max-width:780px){.wrap{padding:13px}.layout{grid-template-columns:1fr}.hero{border-radius:18px}.panel{padding:17px}.stats{grid-template-columns:repeat(2,1fr)}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="hero">
+  <div class="kicker">Systems thinking · Interactive simulation for REM 221 </div>
+  <h1>Hollow Bay: When good solutions create new problems</h1>
+  <p>You are the coastal management team. Over 20 simulated years, protect fish stocks, sustain community wellbeing, and manage a limited public budget. You will make four decisions, one every five years. Your decisions have delayed effects, feedback loops, and unintended consequences—and the system will surprise you.</p>
+  <div class="hero-actions">
+    <button class="primary" id="startBtn">Start the simulation</button>
+    <button class="secondary" id="howBtn">How to play</button>
+  </div>
+</header>
+
+<section class="layout" id="introLayout">
+  <article class="panel" id="missionPanel">
+    <span class="tag">Your mission</span>
+    <h2>Manage the whole system—not just the visible problem.</h2>
+    <p>Hollow Bay depends on fishing, coastal habitats, and local jobs. Fish catches have been falling. Your team will make one decision per round, then receive new information about the consequences.</p>
+    <div class="scenario"><strong>Starting situation</strong><br>Fish stocks are under pressure. The community wants action now, while ecological recovery may take years. You have a budget of 100 units.</div>
+    <h3>What you will practise</h3>
+    <div class="pillrow"><span class="pill">Feedback loops</span><span class="pill">Delays</span><span class="pill">Bounded rationality</span><span class="pill">System boundaries</span><span class="pill">Archetypes</span><span class="pill">Unintended consequences</span></div>
+  </article>
+  <aside class="panel hidden" id="howPanel">
+    <h2>How to play</h2>
+    <ol>
+      <li>Read the scenario and choose one intervention.</li>
+      <li>Record what you expect to happen.</li>
+      <li>Advance the year and reveal consequences.</li>
+      <li>Use the debrief to explain surprises with systems concepts.</li>
+    </ol>
+    <p class="small muted">There is no perfect option. Your score is a prompt for discussion, not a scientific forecast.</p>
+  </aside>
+  <aside class="panel" id="sidebar">
+    <h2>Hollow Bay dashboard</h2>
+    <p class="muted small">Illustrative indices for learning—not real-world estimates.</p>
+    <div class="stats">
+      <div class="stat"><span>Public budget</span><strong id="budget">100</strong><span>units remaining</span></div>
+      <div class="stat"><span>Fish stock</span><strong id="fish">70</strong><span>/ 100 index</span><div class="bar"><i id="fishBar" style="width:70%"></i></div></div>
+      <div class="stat"><span>Habitat health</span><strong id="habitat">65</strong><span>/ 100 index</span><div class="bar"><i id="habitatBar" style="width:65%"></i></div></div>
+      <div class="stat"><span>Community wellbeing</span><strong id="wellbeing">60</strong><span>/ 100 index</span><div class="bar"><i id="wellbeingBar" style="width:60%"></i></div></div>
+    </div>
+    <div class="note small" id="yearNote">Year 0 · Before intervention</div>
+  </aside>
+</section>
+
+<main class="panel hidden" id="gamePanel" style="margin-top:18px">
+<div class="roundtop">
+  <div>
+    <span class="tag" id="roundTag">Round 1 of 4</span>
+    <h2 id="roundTitle" style="margin:10px 0 0">The quick fix</h2>
+  </div>
+  <span class="muted small" id="yearLabel">Decision at Year 0</span>
+</div>
+
+<div class="progress">
+  <i class="active" id="p1"></i>
+  <i id="p2"></i>
+  <i id="p3"></i>
+  <i id="p4"></i>
+</div>
+  <div class="scenario"><strong id="scenarioLead">The pressure to act is growing.</strong><div id="scenarioText">Fishers' incomes are falling and the local government is under pressure.</div></div>
+  <p class="question" id="question">Which intervention will you choose?</p>
+  <div class="choices" id="choices"></div>
+  <div style="margin-top:16px"><label for="prediction"><strong>Prediction: What do you expect to happen, and when?</strong></label><textarea id="prediction" placeholder="We expect... because... The effects may appear after..."></textarea></div>
+  <div class="controls"><button class="primary" id="decideBtn">Commit to this decision</button><button class="quiet" id="resetChoiceBtn">Clear choice</button></div>
+  <div class="feedback hidden" id="roundFeedback" aria-live="polite"></div>
+  <div class="controls hidden" id="nextControls"><button class="primary" id="nextBtn">Advance to next year →</button></div>
+</main>
+
+<main class="panel hidden" id="debriefPanel" style="margin-top:18px">
+  <div id="printHeader" class="print-only"></div>
+  <span class="tag">Simulation complete</span><h2>Debrief: What surprised your team?</h2>
+  <p id="endingText"></p>
+  <div class="stats" id="finalStats"></div>
+  <h3 style="margin-top:24px">1. Your run over time</h3>
+  <div id="timeline"></div>
+  <div class="note small" id="turning"></div>
+  <h3 style="margin-top:24px">2. What the dashboard didn't show</h3>
+  <div class="stats" id="hiddenStats"></div>
+  <p class="muted small" id="hiddenNote"></p>
+  <h3 style="margin-top:24px">3. Diagnose the system: archetypes in your run</h3>
+  <p class="muted small">Ranked by how strongly your own decisions triggered each pattern. Open any card for the loop, the evidence from your run, and a leverage point.</p>
+  <div id="archetypes"></div>
+  <h3>4. Reflect on your mental model</h3>
+  <label for="reflection"><strong>Which assumption would you revise after seeing the outcome?</strong></label>
+  <textarea id="reflection" placeholder="At first we assumed... Now we think..."></textarea>
+  <div id="printReflection" class="print-only"></div>
+  <h3 style="margin-top:18px">5. Design a tailored management plan</h3>
+  <p class="muted small">Choose a complementary action and an indicator to monitor. The plan is built from your decisions and the final state of the system.</p>
+  <div class="controls">
+    <select id="complement">
+      <option value="livelihoods">Temporary income support and alternative livelihoods</option>
+      <option value="enforcement">Fair enforcement and monitoring</option>
+      <option value="habitat">Protect and restore nursery habitat</option>
+      <option value="comanagement">Co-design restrictions with local fishers</option>
+    </select>
+    <select id="indicator">
+      <option value="stock">Fish abundance and population structure</option>
+      <option value="effort">Total fishing mortality, including displaced effort</option>
+      <option value="income">Household income and food security</option>
+      <option value="habitat">Habitat quality and juvenile recruitment</option>
+    </select>
+    <button class="primary" id="planBtn">Generate my management plan</button>
+  </div>
+  <div class="feedback hidden" id="planOutput" aria-live="polite"></div>
+  <h3 style="margin-top:22px">Your decisions</h3><div id="decisionLog"></div>
+  <div class="controls"><button class="secondary" id="downloadBtn">Save report as PDF</button><button class="primary" id="restartBtn">Play again</button></div>
+</main>
+<div class="footer">Hollow Bay is a fictional teaching simulation. Indicators and outcomes are simplified for classroom discussion, not predictions for a real fishery.</div>
+</div>
+<script>
+(() => {
+const initial={budget:100,fish:70,habitat:65,wellbeing:60,year:0,round:0,compliance:70,pressure:58,trust:60,displaced:0,capacity:0,tourism:false,alt:0};
+let s={...initial}, chosen=null, log=[], lastResult=null, diagnosis=[];
+const rounds = [
+  {
+    title: "The quick fix",
+    year: 0,
+    lead: "The pressure to act is growing.",
+    text: "Fish catches have fallen for several seasons. Fishers are losing income, and the local government is under pressure to act.",
+    question: "Which intervention will you choose?",
+    event: "Seafood demand continues to rise. Over the next five years, high fishing pressure can reduce stocks faster than natural recruitment replaces them.",
+    choices: [
+      {id:"subsidy",name:"Subsidise fishing equipment",desc:"Protect short-term income but increase fishing capacity.",cost:20},
+      {id:"restrict",name:"Restrict fishing effort",desc:"Reduce fishing mortality, accepting short-term income costs.",cost:15},
+      {id:"habitat",name:"Restore coastal habitat",desc:"Invest in nursery habitat; ecological benefits take time.",cost:25},
+      {id:"livelihoods",name:"Diversify livelihoods",desc:"Reduce dependence on fishing and ease pressure on stocks.",cost:25}
+    ]
+  },
+  {
+    title: "The delayed response",
+    year: 5,
+    lead: "The first consequences emerge.",
+    text: "Five years have passed. Some indicators have improved, but others may have deteriorated. Ecological recovery takes time, and households respond to changes in income and restrictions.",
+    question: "What will you prioritise now?",
+    event: "Fish recovery depends on fishing mortality, habitat condition, compliance, and recruitment. A policy may be working before its full benefits become visible.",
+    choices: [
+      {id:"enforce",name:"Strengthen fair monitoring and enforcement",desc:"Improve compliance and reduce illegal or excessive fishing.",cost:20},
+      {id:"restore",name:"Continue habitat restoration",desc:"Build ecological capacity despite delayed returns.",cost:20},
+      {id:"relief",name:"Provide emergency income relief",desc:"Reduce immediate hardship without directly rebuilding fish stocks.",cost:15},
+      {id:"open",name:"Relax restrictions to restore income",desc:"Offer short-term relief but risk renewed fishing pressure.",cost:0}
+    ]
+  },
+  {
+    title: "The unintended consequence",
+    year: 10,
+    lead: "Pressures begin to interact.",
+    text: "A decade has passed. Fishing effort may have shifted to neighbouring waters. Habitat loss, uneven benefits, and public trust can now influence the outcome of earlier decisions.",
+    question: "How will you respond to these connected pressures?",
+    event: "When one pressure is reduced, another can become the limiting factor. Habitat protection will not necessarily restore fish stocks if fishing mortality remains high.",
+    choices: [
+      {id:"comanage",name:"Co-design rules with the community",desc:"Build legitimacy, local knowledge, and shared responsibility.",cost:15},
+      {id:"protect",name:"Protect connected nursery habitats",desc:"Address habitat loss and preserve ecological connectivity.",cost:20},
+      {id:"patrol",name:"Focus on enforcement alone",desc:"Reduce fishing pressure but leave livelihood pressures unresolved.",cost:20},
+      {id:"expand",name:"Expand tourism infrastructure quickly",desc:"Create jobs and revenue, but risk damaging coastal habitat.",cost:15}
+    ]
+  },
+  {
+    title: "The long-term trade-off",
+    year: 15,
+    lead: "The final decision will shape the next five years.",
+    text: "Your team has reached its fourth decision point. The budget may be limited, ecological damage may be difficult to reverse, and community responses depend on the fairness and credibility of previous measures.",
+    question: "What final intervention will you choose for the next five years?",
+    event: "The final five-year interval tests whether your strategy can sustain recovery. Accumulated pressures and ecological delays can persist even after a change in policy.",
+    choices: [
+      {id:"comanage",name:"Consolidate community co-management",desc:"Strengthen shared rules and long-term compliance.",cost:15},
+      {id:"protect",name:"Prioritise critical habitat recovery",desc:"Protect nursery areas and improve ecological resilience.",cost:20},
+      {id:"livelihoods",name:"Expand alternative livelihoods",desc:"Reduce dependence on fishing and protect household wellbeing.",cost:25},
+      {id:"enforce",name:"Maintain fair enforcement and monitoring",desc:"Keep fishing pressure under control and track recovery.",cost:20}
+    ]
+  }
+];
+const eventText={
+  overfishing:"Fishing pressure stayed above what the stock can replace, so the fish index kept falling.",
+  recovery:"Pressure was low enough, and nursery habitat healthy enough, for the stock to rebuild.",
+  stalled:"Pressure was low, but weak nursery habitat held recruitment back, so the stock could not rebuild.",
+  collapse:"The stock fell into a critical zone where decline can feed on itself.",
+  slowRecovery:"The depleted stock is rebuilding far more slowly than it declined.",
+  nursery:"Degraded nursery habitat is reducing the number of young fish.",
+  habitatLoss:"Heavy fishing pressure and its knock-on effects are degrading habitat.",
+  tourism:"Tourism depends on a healthy coast. With habitat damaged, visitor income and wellbeing are eroding.",
+  desperation:"Low wellbeing is pushing households to fish harder and ignore rules.",
+  trust:"Low trust in the rules is eroding compliance.",
+  incomeLoss:"Lower effort means lower catches, and with no alternative income yet, households are bearing the cost while the stock rebuilds."
+};
+const $=id=>document.getElementById(id);
+const clamp=(v,min=0,max=100)=>Math.max(min,Math.min(max,Math.round(v)));
+// Effective fishing pressure: the formal pressure level, plus pressure hidden in
+// overcapacity and displaced effort, adjusted for how well rules are followed.
+function effPressure(){
+  const lowCompliance=Math.max(0,70-s.compliance)*0.3;
+  const highCompliance=Math.max(0,s.compliance-70)*0.1;
+  return s.pressure + s.capacity*3 + s.displaced*0.5 + lowCompliance - highCompliance;
+}
+function updateDash(){
+ ["budget","fish","habitat","wellbeing"].forEach(k=>$(k).textContent=s[k]);
+ ["fish","habitat","wellbeing"].forEach(k=>$(k+"Bar").style.width=s[k]+"%");
+ $("yearNote").textContent=`Year ${s.year} · ${s.round===0&&!lastResult?"Before intervention":"After decision "+(lastResult?log.length:s.round)}`;
+}
+function renderRound(){
+  const r = rounds[s.round]; chosen = null; $("prediction").value = "";
+  $("roundTag").textContent = `Round ${s.round + 1} of ${rounds.length}`;
+  $("roundTitle").textContent = r.title;
+  $("yearLabel").textContent = `Decision at Year ${r.year}`;
+  $("scenarioLead").textContent = r.lead;
+  $("scenarioText").textContent = r.text;
+  $("question").textContent = r.question;
+  [1,2,3,4].forEach(n => $("p"+n).classList.toggle("active", n <= s.round + 1));
+
+  $("choices").innerHTML = "";
+  r.choices.forEach((c, i) => {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "choice";
+    b.innerHTML = `<span class="letter">${"ABCD"[i]}</span><span><strong>${c.name}</strong><small>${c.desc} (Cost: ${c.cost})</small></span>`;
+    b.addEventListener("click", () => {
+      chosen = c.id;
+      document.querySelectorAll(".choice").forEach(x => x.classList.remove("selected"));
+      b.classList.add("selected");
+    });
+    $("choices").appendChild(b);
+  });
+
+  $("roundFeedback").classList.add("hidden");
+  $("nextControls").classList.add("hidden");
+  $("decideBtn").classList.remove("hidden");
+  $("resetChoiceBtn").classList.remove("hidden");
+}
+function applyDecision(id){
+ const c=rounds[s.round].choices.find(x=>x.id===id), before={...s};
+ s.budget=Math.max(0,s.budget-c.cost);
+ const prevRestraint=log.some(x=>x.id==="restrict"||x.id==="enforce");
+ let msg="",effects=[],extra=[];
+ switch(id){
+ case "subsidy":
+  s.wellbeing+=9;s.pressure+=18;s.fish-=8;s.capacity+=1;s.trust-=3;
+  msg="Income improves quickly, but a larger fleet adds pressure to the fish stock. The extra boats outlast the subsidy, and the benefits mostly reach those who already own vessels.";
+  effects=["Short-term benefit is visible; the capacity it creates is hard to remove later."];break;
+ case "restrict":
+  s.pressure-=20;s.fish+=2;s.wellbeing-=10;s.compliance-=4;s.trust-=6;
+  msg="Fishing mortality falls, but households face immediate income losses. Fish recovery will not be instantaneous.";
+  if(s.capacity>0){s.compliance-=8;extra.push("Fishers still paying off new equipment resist the limits, so compliance drops further.");}
+  effects=["A delayed ecological benefit meets an immediate social cost."];break;
+ case "habitat":
+  s.habitat+=10;s.wellbeing-=2;s.fish+=1;
+  msg="Habitat condition improves, but the fish population responds only slightly at first.";
+  effects=["Restoration is a long-term investment; habitat is not the only limiting factor."];break;
+ case "livelihoods":
+  s.wellbeing+=7;s.pressure-=9;s.trust+=4;s.alt+=1;s.displaced=Math.max(0,s.displaced-6);
+  msg="Alternative income reduces dependence on fishing and eases pressure on the stock.";
+  if(s.capacity>0){s.capacity-=1;extra.push("Transition support lets some fishers sell or retire boats, reducing overcapacity.");}
+  effects=["Changing incentives can reduce pressure rather than only treating the symptom."];break;
+ case "enforce":
+  if(s.trust<50){
+   s.compliance+=8;s.pressure-=6;s.fish+=1;s.wellbeing-=4;s.trust-=7;
+   msg="Monitoring is rolled out in a community that does not trust the rules. Compliance improves only a little, and enforcement is seen as punitive, so trust erodes further.";
+   effects=["Rules work through human responses; enforcement without legitimacy can backfire."];
+  } else {
+   s.compliance+=18;s.pressure-=12;s.fish+=3;s.wellbeing-=2;
+   msg="Better monitoring improves compliance and reduces fishing pressure, though enforcement has costs and needs legitimacy.";
+   effects=["Rules work through human responses, not just their formal existence."];
+  }
+  break;
+ case "restore":
+  s.habitat+=9;s.fish+=2;s.wellbeing-=1;
+  msg="Habitat improves further. Recruitment and catches may still lag behind habitat recovery.";
+  effects=["A delay can make a useful policy look ineffective if judged too soon."];break;
+ case "relief":
+  if(log.some(x=>x.id==="livelihoods")){
+   s.wellbeing+=9;s.pressure-=2;
+   msg="Income relief reduces immediate hardship and works as a bridge while your livelihood support takes hold.";
+   effects=["Relief is most useful as a bridge to a fundamental solution, not a substitute for one."];
+  } else {
+   s.wellbeing+=9;s.pressure+=5;s.trust-=2;
+   msg="Income relief reduces immediate hardship, but with no alternative livelihoods to move into, households keep fishing as hard as before and expect support to continue.";
+   effects=["Relief is useful, but may become a substitute for fundamental change if repeatedly relied on."];
+  }
+  break;
+ case "open":
+  s.wellbeing+=8;s.pressure+=18;s.compliance-=8;s.fish-=9;s.trust-=12;
+  msg="Some incomes recover in the short term, but relaxing restrictions raises fishing pressure and weakens compliance.";
+  if(prevRestraint){s.compliance-=6;s.trust-=6;extra.push("Reversing earlier restrictions signals that rules are negotiable, so even law-abiding fishers stop cooperating.");}
+  effects=["A quick fix can re-create the original problem."];break;
+ case "comanage":
+  s.compliance+=15;s.pressure-=8;s.wellbeing+=4;s.fish+=2;s.trust+=14;s.displaced=Math.max(0,s.displaced-5);
+  msg="Shared rule-making can improve legitimacy and compliance, although results still depend on enforcement and ecological conditions.";
+  if(before.trust>=55){s.compliance+=5;extra.push("Existing trust gives the process a head start, so rules are adopted faster.");}
+  if(before.trust<35){s.compliance-=7;s.trust-=6;extra.push("After broken trust, many fishers suspect the process is for show, so progress starts slowly.");}
+  effects=["Social trust can help a balancing feedback work as intended."];break;
+ case "protect":
+  s.habitat+=10;s.fish+=3;s.wellbeing-=1;
+  msg="Connected nursery habitats improve, but fish recovery still depends on mortality and other ecological constraints.";
+  effects=["Addressing one limiting factor may reveal another."];break;
+ case "patrol":
+  s.compliance+=12;s.pressure-=10;s.wellbeing-=5;s.fish+=2;s.trust-=8;
+  msg="Enforcement reduces some fishing pressure, but unresolved livelihood pressures may encourage displacement or resistance.";
+  if(s.wellbeing<45){s.compliance-=6;s.pressure+=5;extra.push("Hardship plus tougher patrols pushes some households into illegal fishing and open resistance.");}
+  effects=["Deterrence alone may not address the incentives behind behaviour."];break;
+ case "expand":
+  s.wellbeing+=8;s.habitat-=12;s.pressure+=2;s.tourism=true;s.alt+=1;s.trust-=4;
+  msg="Tourism creates jobs and revenue, but rapid shoreline development damages habitat. The benefits flow mainly to those with capital and land.";
+  effects=["Benefits in one sector can create costs outside a narrow system boundary."];break;
+ }
+ // Restrictions without an income alternative displace some effort rather than removing it.
+ if(["restrict","enforce","patrol"].includes(id)&&s.wellbeing<55){
+  s.displaced+={restrict:6,enforce:4,patrol:5}[id];
+  extra.push("With little income to fall back on, some effort moves to neighbouring waters or into unreported fishing, and part of it returns to pressure the local stock.");
+ }
+ ["fish","habitat","wellbeing","compliance","pressure","trust","displaced"].forEach(k=>s[k]=clamp(s[k]));
+ s.capacity=Math.max(0,s.capacity);
+ const entryEff=Math.round(effPressure());
+
+ // Simulate the five-year interval following this decision.
+ // These are illustrative teaching dynamics, not a calibrated fishery model.
+ const events=new Set();
+ for (let yearStep = 0; yearStep < 5; yearStep++) {
+   const eff=effPressure();
+   let dFish=0, dHab=0;
+   if (eff>55) {
+     // Overfishing: losses grow with pressure.
+     dFish-=Math.min(6,Math.max(1,Math.round((eff-50)/10)));
+     events.add("overfishing");
+   } else if (eff<45) {
+     // Recovery needs low pressure AND a healthy nursery habitat.
+     if (s.habitat>=50) { dFish+=s.habitat>=70?2:1; events.add("recovery"); }
+     else events.add("stalled");
+   }
+   // Depensation: a depleted stock rebuilds much more slowly than it declines.
+   if (s.fish<25) { events.add("collapse"); if(dFish>0){dFish=Math.max(0,dFish-1);events.add("slowRecovery");} else dFish-=1; }
+   if (s.habitat<35) { dFish-=1; events.add("nursery"); }
+   if (eff>75) { dHab-=2; events.add("habitatLoss"); } else if (eff>55) dHab-=1;
+   // Wellbeing follows catches, and tourism depends on habitat.
+   if (s.fish<25) s.wellbeing-=3; else if (s.fish<40) s.wellbeing-=1; else if (s.fish>=75) s.wellbeing+=1;
+   if (s.tourism && s.habitat<50) { s.wellbeing-=1; events.add("tourism"); }
+   // Lower effort cuts incomes until the stock rebuilds or alternatives exist.
+   if (eff<45 && s.alt===0 && s.fish<85) { s.wellbeing-=2; events.add("incomeLoss"); }
+   // Social feedbacks: hardship and distrust undermine compliance.
+   if (s.wellbeing<35) { s.compliance-=2; s.pressure+=1; events.add("desperation"); }
+   if (s.trust<35) { s.compliance-=2; events.add("trust"); }
+   s.fish+=dFish; s.habitat+=dHab;
+   ["fish","habitat","wellbeing","compliance","pressure"].forEach(k=>s[k]=clamp(s[k]));
+ }
+ s.budget = clamp(s.budget, 0, 100);
+ s.year = rounds[s.round].year + 5;
+ const fullMsg=msg+(extra.length?" "+extra.join(" "):"");
+ lastResult = {id, choice:c.name, before, after:{...s}, msg:fullMsg, effects, event:rounds[s.round].event, prediction:$("prediction").value.trim()};
+ log.push({
+  id,
+  round: s.round + 1,
+  year: rounds[s.round].year,
+  outcomeYear: s.year,
+  choice: c.name,
+  cost: c.cost,
+  prediction: lastResult.prediction,
+  result: fullMsg,
+  events: [...events],
+  fishBefore: before.fish,
+  trustBefore: before.trust,
+  eff: entryEff,
+  stats: {
+    fish: s.fish,
+    habitat: s.habitat,
+    wellbeing: s.wellbeing,
+    budget: s.budget
+  }
+ });
+ updateDash();
+ const evList=[...events].map(k=>eventText[k]).filter(Boolean);
+ $("roundFeedback").innerHTML=`<strong>What happened?</strong><p>${fullMsg}</p>${evList.length?`<p><strong>Over the next five years:</strong></p><ul>${evList.map(t=>`<li>${t}</li>`).join("")}</ul>`:""}<p><strong>New information:</strong> ${lastResult.event}</p><p><strong>Systems lens:</strong> ${effects[0]}</p><p class="small muted">Compare this result with your prediction. The model is intentionally simplified: outcomes illustrate plausible mechanisms, not real forecasts.</p>`;
+ $("roundFeedback").classList.toggle("warning",(before.fish-s.fish)>=8||events.has("collapse"));
+ $("roundFeedback").classList.remove("hidden");$("decideBtn").classList.add("hidden");$("resetChoiceBtn").classList.add("hidden");$("nextControls").classList.remove("hidden");
+ $("nextBtn").textContent = s.round === rounds.length - 1 ? "See the debrief →" : "Advance to next year →";
+}
+
+/* ---------- Debrief: timeline, hidden variables, archetypes ---------- */
+function drawTimeline(){
+ const pts=[{year:0,fish:initial.fish,habitat:initial.habitat,wellbeing:initial.wellbeing}].concat(log.map(x=>({year:x.outcomeYear,...x.stats})));
+ const W=600,H=230,L=38,R=14,T=14,B=30;
+ const X=y=>L+(y/20)*(W-L-R), Y=v=>T+(1-v/100)*(H-T-B);
+ const series=[["fish","Fish stock","#167d80"],["habitat","Habitat health","#2d7d62"],["wellbeing","Community wellbeing","#df795e"]];
+ let g="";
+ [0,25,50,75,100].forEach(v=>g+=`<line x1="${L}" x2="${W-R}" y1="${Y(v)}" y2="${Y(v)}" stroke="#d9e3df" stroke-width="1"/><text x="${L-6}" y="${Y(v)+4}" font-size="11" text-anchor="end" fill="#61757b">${v}</text>`);
+ [0,5,10,15,20].forEach(yv=>g+=`<text x="${X(yv)}" y="${H-8}" font-size="11" text-anchor="middle" fill="#61757b">Yr ${yv}</text>`);
+ log.forEach(x=>g+=`<line x1="${X(x.year)}" x2="${X(x.year)}" y1="${T}" y2="${H-B}" stroke="#e9bd63" stroke-dasharray="3 4"/>`);
+ series.forEach(([k,n,c])=>{
+  g+=`<polyline fill="none" stroke="${c}" stroke-width="3" stroke-linejoin="round" points="${pts.map(p=>X(p.year)+","+Y(p[k])).join(" ")}"/>`+pts.map(p=>`<circle cx="${X(p.year)}" cy="${Y(p[k])}" r="3.5" fill="${c}"/>`).join("");
+ });
+ const alt="Line chart of fish stock, habitat health and wellbeing over 20 years. "+series.map(([k,n])=>`${n}: ${pts.map(p=>p[k]).join(", ")}`).join(". ");
+ $("timeline").innerHTML=`<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="${alt}">${g}</svg><div class="legend">${series.map(([k,n,c])=>`<span style="--c:${c}">${n}</span>`).join("")}<span style="--c:#e9bd63">Decision points</span></div>`;
+}
+function turningPoint(){
+ let best=null,social=null;
+ log.forEach(x=>{
+  const d=x.stats.fish-x.fishBefore;
+  if(!best||Math.abs(d)>Math.abs(best.d)) best={x,d};
+ });
+ const prevW=i=>i===0?initial.wellbeing:log[i-1].stats.wellbeing;
+ log.forEach((x,i)=>{const d=x.stats.wellbeing-prevW(i);if(!social||d<social.d)social={x,d};});
+ let t=`<strong>Turning points.</strong> The biggest swing in fish stock followed your Year ${best.x.year} decision (“${best.x.choice}”): the index ${best.d>=0?"rose":"fell"} by ${Math.abs(best.d)} points over five years.`;
+ if(social.d<=-5) t+=` The heaviest social cost came after your Year ${social.x.year} decision (“${social.x.choice}”), when wellbeing fell by ${Math.abs(social.d)} points.`;
+ const last=log[log.length-1];
+ const worstEv=["collapse","overfishing","stalled","trust","desperation","tourism"].find(k=>log.some(x=>x.events.includes(k)));
+ if(worstEv) t+=` A recurring mechanism in your run: ${eventText[worstEv].charAt(0).toLowerCase()+eventText[worstEv].slice(1)}`;
+ $("turning").innerHTML=t;
+}
+function showHidden(){
+ const eff=Math.round(effPressure());
+ $("hiddenStats").innerHTML=[["Effective fishing pressure",eff],["Rule compliance",s.compliance],["Community trust",s.trust],["Displaced effort",s.displaced]].map(([k,v])=>`<div class="stat"><span>${k}</span><strong>${v}</strong></div>`).join("");
+ $("hiddenNote").textContent=`These variables drove outcomes but never appeared on your dashboard. Effective pressure above about 55 keeps the stock declining; below about 45 it can rebuild, but only if nursery habitat is healthy. ${s.capacity>0?`Your fleet still carries about ${s.capacity} unit${s.capacity>1?"s":""} of excess capacity from earlier subsidies. `:""}Which of these would you want to measure from the start?`;
+}
+function diagnose(){
+ const has=id=>log.some(x=>x.id===id);
+ const yr=id=>log.filter(x=>x.id===id).map(x=>"Year "+x.year).join(" and ");
+ const hab=log.filter(x=>["habitat","restore","protect"].includes(x.id));
+ const A=[];
+
+ {const ev=[],good=[];
+  if(has("subsidy"))ev.push([2,`Subsidising equipment (${yr("subsidy")}) raised incomes at once, but the extra fishing capacity stayed in the system and kept pushing pressure up, even after you changed course.`]);
+  if(has("open"))ev.push([3,`Relaxing restrictions (${yr("open")}) traded long-term stock health for short-term income, and it damaged trust and compliance as well.`]);
+  if(has("open")&&(has("restrict")||has("enforce")))ev.push([1,"Reversing earlier restrictions taught fishers that rules are negotiable, so the original problem returned with weaker rules."]);
+  if(has("patrol")&&s.trust<50)ev.push([2,`Enforcement without legitimacy (${yr("patrol")}) provoked resistance. Community trust ended at ${s.trust}/100.`]);
+  if(has("livelihoods"))good.push(`Transition support (${yr("livelihoods")}) addressed the cause (dependence on fishing) instead of only the symptom.`);
+  if(has("comanage"))good.push(`Co-design (${yr("comanage")}) replaced top-down quick fixes with rules people helped shape.`);
+  A.push({key:"fixes",title:"Fixes That Fail",generic:"A quick response relieves a symptom, but its side effects worsen the original problem.",trigger:"Choosing options that raise capacity or weaken restrictions to relieve income pressure, or enforcing without trust.",loop:"Quick fix → symptom relieved → side effect (more pressure, less trust) → original problem returns, often worse → pressure for another quick fix.",leverage:"Pair short-term relief with a measure that works on the cause, and agree in advance on the conditions under which rules may be relaxed (for example, only if the stock stays above a set level).",question:"Which of your decisions made things better within a year but worse after five?",evidence:ev,good});}
+
+ {const ev=[],good=[];
+  if(has("relief")&&!has("livelihoods")&&!has("comanage"))ev.push([3,`Emergency relief (${yr("relief")}) eased hardship, but with no alternatives to move into, households kept fishing and the need for support continued. The fundamental solution (reducing dependence on fishing) was left undeveloped.`]);
+  if(has("patrol"))ev.push([2,`Enforcement alone (${yr("patrol")}) targeted behaviour while leaving the livelihood pressure behind it untouched.`]);
+  if(s.displaced>=6)ev.push([2,`Effort was displaced rather than reduced: the displaced-effort index ended at ${s.displaced}. Part of the burden moved outside your system boundary instead of disappearing.`]);
+  if(has("relief")&&(has("livelihoods")||has("comanage")))good.push(`Relief (${yr("relief")}) worked as a bridge because it was paired with a longer-term solution.`);
+  if(has("livelihoods"))good.push(`Livelihood diversification (${yr("livelihoods")}) is a fundamental solution that lowers the need for relief.`);
+  A.push({key:"burden",title:"Shifting the Burden",generic:"Repeated symptomatic relief displaces investment in the fundamental solution, but only if the relief crowds out that solution. Ask what capacity is being neglected.",trigger:"Repeating relief or enforcement without building alternatives to fishing.",loop:"Symptom → quick relief (balancing) → less urgency to fix the cause → fundamental capacity erodes → symptom returns and relief is needed again (reinforcing dependence).",leverage:"Give relief an end date and a destination: time-limited support linked to training, gear transition or alternative income.",question:"If the relief stopped tomorrow, what would households do?",evidence:ev,good});}
+
+ {const ev=[],good=[];
+  if(has("subsidy"))ev.push([2,`Equipment subsidies (${yr("subsidy")}) tend to reach fishers who already own boats and can co-finance. They win more access to the stock while small-scale fishers fall behind.`]);
+  if(has("expand"))ev.push([2,`Tourism infrastructure (${yr("expand")}) concentrated benefits among those with capital and land, while habitat costs were shared by everyone.`]);
+  if((has("subsidy")||has("expand"))&&s.trust<45)ev.push([1,`Community trust ended at ${s.trust}/100, a common sign that benefits are seen as unevenly shared.`]);
+  if(has("comanage"))good.push(`Co-design (${yr("comanage")}) gave more people a voice in how benefits and limits are shared.`);
+  if(has("livelihoods"))good.push(`Transition support (${yr("livelihoods")}) can broaden opportunity if it reaches small-scale and vulnerable households.`);
+  A.push({key:"successful",title:"Success to the Successful",generic:"Resources flow to the already advantaged, helping them win still more resources. Consider how unequal access to grants or permits could reinforce differences between communities.",trigger:"Subsidies or infrastructure whose benefits go mainly to those with capital.",loop:"Early winners gain resources → use them to win more access (permits, grants, land) → advantage compounds (reinforcing) while others fall behind, lose trust and stop cooperating.",leverage:"Set fair access rules: target support to small-scale and vulnerable households, allocate permits transparently, and share tourism revenue.",question:"Who benefited from your decisions, and who bore the costs?",evidence:ev,good});}
+
+ {const ev=[],good=[];
+  hab.filter(x=>x.eff>55).forEach(x=>ev.push([2,`Habitat investment (Year ${x.year}: “${x.choice}”) did not pay off as hoped because fishing pressure was still too high (effective pressure ${x.eff}). Habitat was not the binding constraint.`]));
+  if(has("restrict")&&has("open"))ev.push([2,`You restricted effort (${yr("restrict")}) and then relaxed the limits (${yr("open")}), before the slow ecological benefits could fully show.`]);
+  else if(has("restrict"))ev.push([1,`Restricting effort (${yr("restrict")}) cost income immediately while the ecological benefit arrived over years, a delay that tempts early reversal.`]);
+  if(log.some(x=>x.stats.fish<25))ev.push([2,"The stock fell below about 25, where recovery is much slower than the decline was."]);
+  if(log.some(x=>x.stats.habitat<35))ev.push([1,"Nursery habitat dropped below 35, so fewer young fish were available to replace what was caught."]);
+  const hg=hab.find(x=>x.eff<=55);
+  if(hg)good.push(`Habitat work (Year ${hg.year}: “${hg.choice}”) could translate into fish recovery because fishing pressure was low enough.`);
+  A.push({key:"delays",title:"Delays and limiting factors",generic:"Fish populations respond slowly, and fixing one constraint reveals the next. Habitat restoration alone may not improve catches if fishing mortality, water quality or connectivity remains limiting.",trigger:"Investing in habitat while pressure stays high, or abandoning measures before their benefits appear.",loop:"Action → delay → visible result. Judge too early and a working policy looks ineffective; fix the wrong factor and the binding constraint stays in place.",leverage:"Agree in advance how long to wait and which leading indicators (fishing mortality, juvenile recruitment) show progress before the stock responds. Fix the binding constraint first.",question:"Which limiting factor was actually holding the fish stock back at each decision?",evidence:ev,good});}
+
+ {const ev=[],good=[];
+  if(has("subsidy"))ev.push([2,`Each fisher gains from catching more, while the cost of a depleted stock is shared by everyone. Subsidising equipment (${yr("subsidy")}) sharpened that incentive.`]);
+  if(has("open"))ev.push([2,`Relaxed limits (${yr("open")}) reopened the commons, so individual gains again outweighed shared costs.`]);
+  if(s.displaced>=8)ev.push([1,"Pressure spilled into neighbouring waters, a commons problem that crosses your management boundary."]);
+  if(has("comanage"))good.push(`Co-management (${yr("comanage")}) gives users a stake in the rules, a classic route out of commons dilemmas.`);
+  A.push({key:"commons",title:"Tragedy of the Commons",generic:"A shared resource is depleted because each user's gain is private while the cost is shared.",trigger:"Policies that make it more profitable for each fisher to catch more, with weak shared rules.",loop:"Each user catches more because others will anyway → stock declines → everyone works harder for less → pressure to catch even more (reinforcing).",leverage:"Align individual incentives with the shared stock: clear rights, user-designed rules, visible monitoring and graduated responses.",question:"What makes it rational for one fisher to hold back when others might not?",evidence:ev,good});}
+
+ {const ev=[],good=[];
+  if(has("expand"))ev.push([3,`Tourism infrastructure (${yr("expand")}) lifted wellbeing at first but damaged the coastal habitat that visitors come for.`]);
+  if(s.tourism&&s.habitat<50)ev.push([2,`Habitat ended at ${s.habitat}/100, so the growth engine is undermining its own foundation.`]);
+  if(has("expand")&&has("protect"))good.push(`Protecting nursery habitat (${yr("protect")}) after expansion helped set a limit to growth.`);
+  A.push({key:"limits",title:"Limits to Growth",generic:"Growth runs into a limit, often a resource the growth itself consumes.",trigger:"Expanding tourism or development without habitat limits.",loop:"Growth → success → more growth, until it consumes the resource it depends on (habitat) → growth slows or reverses.",leverage:"Set limits before you reach them: habitat thresholds, setbacks, visitor caps, and revenue ring-fenced for restoration.",question:"What was the growth engine, and what was it quietly using up?",evidence:ev,good});}
+
+ {const ev=[];
+  log.filter(x=>x.id==="comanage"&&x.trustBefore>=35).forEach(x=>ev.push([2,`Co-design (Year ${x.year}) raised trust and compliance, so rules worked with less enforcement effort.`]));
+  if(has("livelihoods"))ev.push([1,`Livelihood support (${yr("livelihoods")}) reduced the need to overfish, making compliance easier.`]);
+  if(log.some(x=>x.id==="enforce"&&x.trustBefore>=50))ev.push([1,"Enforcement built on existing trust, so it was seen as fair."]);
+  if(s.trust>=70)ev.push([1,`Community trust ended high (${s.trust}/100).`]);
+  A.push({key:"virtuous",positive:true,title:"Virtuous circle (reinforcing loop)",generic:"A reinforcing loop can work for you as well as against you: trust, compliance and recovery can feed one another.",trigger:"Co-design, fair rules and livelihood support that raise trust early.",loop:"Trust → compliance → stock recovery and steady income → more trust. The same loop runs in reverse when trust is lost.",leverage:"Protect the loop: keep rules stable, publish results, and avoid reversals that break trust.",question:"Which decision started this loop, and what could break it?",evidence:ev,good:[]});}
+
+ A.forEach(a=>a.score=a.evidence.reduce((n,e)=>n+e[0],0));
+ A.sort((a,b)=>b.score-a.score);
+ return A;
+}
+function renderArchetypes(list){
+ let opened=0;
+ $("archetypes").innerHTML=list.map(a=>{
+  const lvl=a.score>=4?["strong","Strong in your run"]:a.score>=2?["present","Present"]:a.score>=1?["hint","Hint"]:["none","Not evident"];
+  const cls=a.positive&&a.score>0?"b-good":"b-"+lvl[0];
+  const open=a.score>=2&&opened<3?(opened++,"open"):"";
+  const ev=a.evidence.length
+   ? `<p><strong>In your run:</strong></p><ul>${a.evidence.map(e=>`<li>${e[1]}</li>`).join("")}</ul>`
+   : `<p class="muted small">Your decisions did not strongly trigger this pattern. How it tends to appear: ${a.trigger}</p>`;
+  const good=a.good&&a.good.length?`<p class="good"><strong>What helped:</strong></p><ul>${a.good.map(t=>`<li>${t}</li>`).join("")}</ul>`:"";
+  return `<div class="archetype"><details ${open}><summary>${a.title}<span class="badge ${cls}">${lvl[1]}</span></summary><div class="arch-body"><p>${a.generic}</p>${ev}${good}<div class="loopbox"><strong>The loop:</strong> ${a.loop}</div><p><strong>Leverage point:</strong> ${a.leverage}</p><p><strong>Ask your team:</strong> <em>${a.question}</em></p></div></details></div>`;
+ }).join("");
+}
+function finish(){
+ $("gamePanel").classList.add("hidden");$("debriefPanel").classList.remove("hidden");
+ let label=s.fish>=65&&s.wellbeing>=55?"A more resilient outcome":s.fish<25?"Fishery collapse: recovery will take far longer than the decline did":s.fish<40?"Ecological risk remains high":s.wellbeing<40?"Community wellbeing is under pressure":"Mixed results: trade-offs remain";
+ $("endingText").textContent=`${label}. At the end of the simulation, fish stock is ${s.fish}/100, habitat health is ${s.habitat}/100, community wellbeing is ${s.wellbeing}/100, and ${s.budget} budget units remain. No single score tells the whole story: discuss who benefited, who carried the costs, and what your indicators did not capture.`;
+ $("finalStats").innerHTML=[["Fish stock",s.fish],["Habitat health",s.habitat],["Community wellbeing",s.wellbeing],["Budget remaining",s.budget]].map(([k,v])=>`<div class="stat"><span>${k}</span><strong>${v}</strong></div>`).join("");
+ drawTimeline();turningPoint();showHidden();
+ diagnosis=diagnose();renderArchetypes(diagnosis);
+ $("decisionLog").innerHTML=log.map(x=>`<div class="archetype"><strong>Round ${x.round} · Year ${x.year}: ${x.choice}</strong><p class="small">${x.result}</p>${x.events.length?`<p class="small muted"><strong>Dynamics over the next five years:</strong> ${x.events.map(k=>eventText[k]).join(" ")}</p>`:""}<p class="small"><strong>Your prediction:</strong> ${escapeHtml(x.prediction||"No prediction recorded.")}</p><p class="small muted">Fish ${x.stats.fish} · Habitat ${x.stats.habitat} · Wellbeing ${x.stats.wellbeing} · Budget ${x.stats.budget}</p></div>`).join("");
+ updateDash();window.scrollTo({top:$("debriefPanel").offsetTop-12,behavior:"smooth"});
+}
+function escapeHtml(str){return str.replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));}
+
+/* ---------- Tailored management plan ---------- */
+function limiting(){
+ const eff=Math.round(effPressure());
+ if(eff>55)return {key:"mortality",label:"fishing mortality",why:`effective fishing pressure is about ${eff}, and above roughly 55 the stock keeps declining`};
+ if(s.habitat<50)return {key:"habitat",label:"nursery habitat",why:`habitat health is ${s.habitat}/100, which holds back recruitment`};
+ if(s.trust<45||s.compliance<55)return {key:"legitimacy",label:"trust and compliance",why:`trust is ${s.trust}/100 and compliance ${s.compliance}/100, so rules may not work as intended`};
+ if(s.wellbeing<45)return {key:"livelihoods",label:"household wellbeing",why:`wellbeing is ${s.wellbeing}/100, which can push fishing pressure back up`};
+ if(s.fish<40)return {key:"recovery",label:"slow stock recovery",why:`the stock (${s.fish}/100) is still rebuilding after earlier losses`};
+ return {key:"none",label:"no single dominant constraint",why:"pressure, habitat, trust and wellbeing are all in an acceptable range"};
+}
+function buildPlan(){
+ const comp=$("complement").value, ind=$("indicator").value;
+ const eff=Math.round(effPressure()), lim=limiting();
+ const has=id=>log.some(x=>x.id===id);
+ const yrOf=x=>`Year ${x.year}`;
+ const li=a=>a.map(t=>`<li>${t}</li>`).join("");
+
+ // Keep / rework / add, based on what the team actually did
+ const keepMap={restrict:"effort limits (keep them stable, because reversals erode trust)",enforce:"fair monitoring and enforcement",habitat:"nursery habitat restoration",restore:"habitat restoration",protect:"protection of connected nursery habitats",livelihoods:"alternative livelihoods",comanage:"community co-management"};
+ const reworkMap={
+  subsidy:"Stop capacity-increasing subsidies and replace them with a voluntary fleet-transition or buy-back scheme so excess capacity can be retired.",
+  open:"Replace ad hoc relaxations with pre-agreed, rule-based triggers (limits ease only if the stock stays above an agreed level for several years), and rebuild credibility openly.",
+  patrol:"Pair enforcement with income alternatives and community input, so compliance does not rely on deterrence alone.",
+  expand:"Introduce habitat-safe tourism standards (setbacks, visitor caps) and ring-fence part of the revenue for restoration and for affected fishing households.",
+  relief:"Make relief time-limited and linked to an exit path (training, gear transition, alternative income) so it is a bridge, not a substitute for change."
+ };
+ const keep=[],rework=[],seen=new Set();
+ log.forEach(x=>{
+  if(x.id==="enforce"&&x.trustBefore<50){rework.push(`“${x.choice}” (${yrOf(x)}) was rolled out with low trust. Rebuild legitimacy first: publish data, involve fishers in monitoring, make enforcement predictable.`);return;}
+  if(x.id==="relief"&&has("livelihoods")){keep.push(`emergency relief as a bridge (${yrOf(x)}), with an end date`);return;}
+  if(keepMap[x.id]&&!seen.has(keepMap[x.id])){seen.add(keepMap[x.id]);keep.push(`${keepMap[x.id]} (${yrOf(x)})`);}
+  else if(reworkMap[x.id]&&!(x.id==="relief"&&has("livelihoods"))){rework.push(`“${x.choice}” (${yrOf(x)}): ${reworkMap[x.id]}`);}
+ });
+ const add=[];
+ if(s.displaced>=6)add.push(`Track and manage displaced effort (index ${s.displaced}): coordinate with neighbouring areas and include unreported fishing in effort estimates.`);
+ if(s.capacity>0)add.push(`Retire excess fishing capacity (about ${s.capacity} unit${s.capacity>1?"s":""} remain) through voluntary transition support.`);
+ if(s.trust<50)add.push(`Rebuild trust (now ${s.trust}/100): share stock and catch data openly, keep rules stable, and explain decisions.`);
+ if(s.habitat<50)add.push("Protect remaining nursery habitat first. Restoration will not take hold until pressure falls.");
+ if(s.alt===0&&log.some(x=>["restrict","enforce","patrol"].includes(x.id)))add.push("Create alternative income sources: lower effort has cut catches, and without alternatives households carry the cost.");
+ if(s.wellbeing<45)add.push("Provide targeted support for the most affected households, and measure who is being left behind.");
+ if(s.fish<25)add.push("Treat the stock as in recovery: keep strict limits until it is well above the collapse zone, because rebuilding is slow.");
+ if(!add.length)add.push("Maintain current rules, monitor leading indicators, and avoid reversals while benefits accumulate.");
+
+ // Fit of the chosen complement and indicator to the current system state
+ const compFit={
+  livelihoods: s.capacity>0?"Good fit: transition support can also retire the excess capacity left by earlier subsidies.":lim.key==="mortality"?"Good fit: income alternatives reduce the pressure to fish harder, which is your binding constraint.":s.wellbeing<50?"Good fit: wellbeing is under pressure, and support can stop hardship from driving effort back up.":"Useful, but target it carefully. Support that misses the most vulnerable households will not relieve pressure.",
+  enforcement: s.trust<50?`Caution: trust is low (${s.trust}/100), so enforcement alone risks resistance and further trust loss. Pair it with transparent rules and community input.`:lim.key==="mortality"?"Good fit: mortality is the binding constraint, and credible, fair monitoring helps rules work.":"Reasonable for holding gains, as long as rules stay fair and predictable.",
+  habitat: eff>55?"Caution: fishing pressure is still the main constraint, so habitat investment will be undermined until pressure falls. Sequence it after the first step.":s.habitat<60?"Good fit: habitat is thin enough to limit recruitment, and pressure is low enough for the benefit to reach the stock.":"Reasonable, but habitat is not your binding constraint, so expect modest short-term returns.",
+  comanagement: s.trust<35?`Expect a slow start: trust is low (${s.trust}/100). Begin with transparent data sharing and quick, visible wins.`:s.trust>=55?`Good fit: you have trust (${s.trust}/100) to build on, which makes shared rules far more likely to hold.`:"Good fit for building legitimacy, though negotiation will take time."
+ }[comp];
+ const indFit={
+  stock:"Fish abundance is a lagging indicator. A flat reading may mean a delay, not failure. Add fishing mortality as a leading indicator.",
+  effort:`Effort is the best early-warning signal. Effective pressure is about ${eff} now. Include displaced and unreported effort (index ${s.displaced}) so the number is not flattered.`,
+  income:"Household income and food security show who bears the costs and whether hardship will push effort back up. Disaggregate by group to catch inequity.",
+  habitat:"Habitat and juvenile recruitment are slow but fundamental signals. Use them to judge restoration over years, not months."
+ }[ind];
+
+ const firstStep={
+  mortality:"Cut effective fishing pressure first: set or tighten effort limits, count displaced effort, and retire excess capacity with transition support.",
+  habitat:"Protect remaining nursery habitat from further damage, then restore it once pressure is controlled.",
+  legitimacy:"Rebuild trust: publish stock and catch data, involve fishers in monitoring, and keep rules stable and predictable.",
+  livelihoods:"Provide targeted, time-limited income support tied to alternative livelihoods, reaching the most vulnerable households first.",
+  recovery:"Hold the line: keep current limits stable while the stock rebuilds. Recovery is slower than decline, so avoid early relaxation.",
+  none:"Consolidate: keep rules stable, protect what is working, and use the early years to strengthen monitoring."
+ }[lim.key];
+ const secondStep={
+  livelihoods:"Scale up transition support and, where possible, voluntary fleet retirement, so lower effort is something fishers choose rather than endure.",
+  enforcement:"Roll out monitoring in stages, with clear, consistent and fairly applied penalties and public reporting of results.",
+  habitat:"Start restoration where pressure is already low or falling, and protect those sites from fishing and shoreline development.",
+  comanagement:"Set up a standing forum with fishers, women's and youth groups and local officials to co-design and adjust rules."
+ }[comp];
+
+ const top=diagnosis.find(a=>a.score>=2&&!a.positive);
+ const consequences={
+  enforcement:"enforcement costs or loss of trust if rules are perceived as unfair",
+  habitat:"habitat restoration may not yield fish recovery if mortality remains high",
+  livelihoods:"support may be temporary or fail to reach the most vulnerable households",
+  comanagement:"co-management may take time and require negotiation across groups"
+ }[comp];
+ const watch=[`${consequences.charAt(0).toUpperCase()+consequences.slice(1)}.`];
+ if(s.displaced>=6)watch.push("Effort displaced to neighbouring waters or into unreported fishing.");
+ if(has("subsidy")||has("expand"))watch.push("Benefits concentrating among those who already have capital, land or boats.");
+ if(has("relief")&&!has("livelihoods"))watch.push("Dependence on relief if no exit path is built.");
+
+ const delay={habitat:"roughly three to five years",stock:"several years",effort:"one to two years",income:"one to two years"}[ind];
+ const triggers=[
+  s.fish<25?`The stock is in the collapse zone (${s.fish}/100). If it has not clearly risen above 25 within about three years, tighten limits further and check for displaced or unreported effort.`:`Fish stock index falls more than 10 points from today's ${s.fish} (below ${s.fish-10}): review fishing mortality first, then habitat.`,
+  "Effective fishing pressure rises above about 55: tighten limits or investigate displaced effort before the stock responds.",
+  `Wellbeing falls below ${Math.max(30,s.wellbeing-10)} (now ${s.wellbeing}): add targeted support before households shift back to heavy fishing.`,
+  `Trust drops below 45 (now ${s.trust}): pause new restrictions and rebuild legitimacy.`,
+  `Do not judge your priority indicator as failing before ${delay}. Before abandoning a measure, test for a time delay, poor implementation, displaced pressure, or a different limiting factor.`
+ ];
+
+ return `<div class="plan"><strong>Adaptive management plan, tailored to your run</strong>
+ <p>Your decisions leave Hollow Bay mainly limited by <strong>${lim.label}</strong>, because ${lim.why}.${top?` The dominant pattern to guard against is <strong>${top.title}</strong>: ${top.leverage}`:""}</p>
+ <h4>What to keep</h4><ul>${keep.length?li(keep.map(k=>k.charAt(0).toUpperCase()+k.slice(1))):"<li>Nothing from your earlier decisions stands out as worth keeping unchanged, so treat this as a reset.</li>"}</ul>
+ <h4>What to rework</h4><ul>${rework.length?li(rework):"<li>None of your decisions created a pattern that needs undoing.</li>"}</ul>
+ <h4>What to add</h4><ul>${li(add)}</ul>
+ <h4>Your chosen complement: ${$("complement").selectedOptions[0].text}</h4><p>${compFit}</p>
+ <h4>Your chosen indicator: ${$("indicator").selectedOptions[0].text}</h4><p>${indFit}</p>
+ <h4>Suggested sequence</h4><ol><li><strong>Years 1–2:</strong> ${firstStep}</li><li><strong>Years 2–4:</strong> ${secondStep}</li><li><strong>Year 5:</strong> Review indicators against the predictions you recorded in each round, and adjust the plan.</li></ol>
+ <h4>Triggers and review points</h4><ul>${li(triggers)}</ul>
+ <h4>Unintended consequences to monitor</h4><ul>${li(watch)}</ul></div>`;
+}
+
+function start(){s={...initial};chosen=null;log=[];lastResult=null;diagnosis=[];$("missionPanel").classList.add("hidden");$("howPanel").classList.add("hidden");$("gamePanel").classList.remove("hidden");$("debriefPanel").classList.add("hidden");$("planOutput").classList.add("hidden");$("reflection").value="";updateDash();renderRound();window.scrollTo({top:$("gamePanel").offsetTop-12,behavior:"smooth"});}
+$("startBtn").addEventListener("click",start);$("howBtn").addEventListener("click",()=>$("howPanel").classList.toggle("hidden"));
+$("decideBtn").addEventListener("click",()=>{if(!chosen){alert("Choose an intervention first.");return;}applyDecision(chosen);});
+$("resetChoiceBtn").addEventListener("click",()=>{chosen=null;document.querySelectorAll(".choice").forEach(x=>x.classList.remove("selected"));});
+$("nextBtn").addEventListener("click", () => {
+  if (s.round < rounds.length - 1) {
+    s.round++;
+    renderRound();
+    updateDash();
+    window.scrollTo({
+      top: $("gamePanel").offsetTop - 12,
+      behavior: "smooth"
+    });
+  } else {
+    finish();
+  }
+});
+$("restartBtn").addEventListener("click",start);
+$("planBtn").addEventListener("click",()=>{
+ $("planOutput").innerHTML=buildPlan();
+ $("planOutput").classList.remove("hidden");
+});
+$("downloadBtn").addEventListener("click",()=>{
+ // Make sure the tailored plan is part of the report, even if it was not generated yet.
+ if($("planOutput").classList.contains("hidden")){$("planOutput").innerHTML=buildPlan();$("planOutput").classList.remove("hidden");}
+ $("printHeader").innerHTML=`<h1 style="margin:0 0 4px;color:#12313d">Hollow Bay: Team report</h1><p class="small muted" style="margin:0 0 14px">${new Date().toLocaleDateString(undefined,{year:"numeric",month:"long",day:"numeric"})} · Fictional teaching simulation. Indicators are illustrative, not predictions for a real fishery.</p>`;
+ $("printReflection").innerHTML=`<p><strong>Team reflection:</strong><br>${escapeHtml($("reflection").value||"Not recorded.").replace(/\n/g,"<br>")}</p>`;
+ // Expand every archetype card for the printout, then restore the previous state.
+ const ds=[...document.querySelectorAll("#archetypes details")], was=ds.map(d=>d.open);
+ ds.forEach(d=>d.open=true);
+ const restore=()=>{ds.forEach((d,i)=>d.open=was[i]);window.removeEventListener("afterprint",restore);};
+ window.addEventListener("afterprint",restore);
+ window.print();
+});
+updateDash();
+})();
+</script>
+</body>
+</html>
