@@ -21,7 +21,6 @@ Your decisions have delayed effects, feedback loops and unintended consequences,
 
 - [Why this exists](#why-this-exists)
 - [Features](#features)
-- [Quick start](#quick-start)
 - [How to play](#how-to-play)
 - [How the simulation works](#how-the-simulation-works)
 - [Using it in a classroom or workshop](#using-it-in-a-classroom-or-workshop)
