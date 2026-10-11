@@ -1,6 +1,8 @@
 # Hollow Bay: When good solutions create new problems
 
-An interactive systems-thinking simulation created for the Systems Thinking course, REM 221 at SFU. You are the coastal management team of a fictional fishing community. Over 20 simulated years, you make four decisions, one every five years, to protect fish stocks, sustain community wellbeing and manage a limited public budget.
+An interactive systems-thinking simulation created for the Systems Thinking course, REM 221 at SFU. 
+
+You are the coastal management team of a fictional fishing community. Over 20 simulated years, you make four decisions, one every five years, to protect fish stocks, sustain community wellbeing and manage a limited public budget.
 
 Your decisions have delayed effects, feedback loops and unintended consequences, and the system will surprise you.
 
