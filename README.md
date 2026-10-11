@@ -1,13 +1,19 @@
 # Hollow Bay: When good solutions create new problems
 
+
+<!-- Hollow Bay simulation screenshot -->
+<p align="center">
+  <img src="https://raw.githubusercontent.com/pgonzaleze/REM_221_Systems_surprises_simulation/main/Butedale_General_Store_Sept_2002.jpeg"
+       alt="Hollow Bay screenshot"
+       width="700">
+</p>
+
+
 An interactive systems-thinking simulation for the classroom, workshops and self-study. You are the coastal management team of a fictional fishing community. Over 20 simulated years you make four decisions, one every five years, to protect fish stocks, sustain community wellbeing and manage a limited public budget.
 
 Your decisions have delayed effects, feedback loops and unintended consequences, and the system will surprise you.
 
 **[▶ Play it online](https://pgonzaleze.github.io/REM_221_Systems_surprises_simulation/)**
-
-<!-- Add a screenshot or short GIF here, for example: -->
-<!-- ![Hollow Bay screenshot](docs/screenshot.png) -->
 
 ---
 
