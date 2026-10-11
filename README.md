@@ -66,7 +66,7 @@ There is no perfect option. The score is a prompt for discussion, not a forecast
 
 ## How the simulation works
 
-Blue Bay is a deliberately simplified teaching model, not a calibrated fishery model. Each decision applies immediate effects, then a five-year loop plays out year by year.
+Hollow Bay is a deliberately simplified teaching model, not a calibrated fishery model. Each decision applies immediate effects, then a five-year loop plays out year by year.
 
 **Visible indicators** (the dashboard): public budget, fish stock, habitat health, community wellbeing. All are 0–100 indices.
 
