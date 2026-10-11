@@ -1,9 +1,6 @@
 # Hollow Bay: When good solutions create new problems
 
-
-<!-- Hollow Bay simulation screenshot -->
-
-An interactive systems-thinking simulation for the classroom, workshops and self-study. You are the coastal management team of a fictional fishing community. Over 20 simulated years you make four decisions, one every five years, to protect fish stocks, sustain community wellbeing and manage a limited public budget.
+An interactive systems-thinking simulation created for the Systems Thinking course, REM 221 at SFU. You are the coastal management team of a fictional fishing community. Over 20 simulated years, you make four decisions, one every five years, to protect fish stocks, sustain community wellbeing and manage a limited public budget.
 
 Your decisions have delayed effects, feedback loops and unintended consequences, and the system will surprise you.
 
@@ -17,7 +14,6 @@ Your decisions have delayed effects, feedback loops and unintended consequences,
 - [Features](#features)
 - [How to play](#how-to-play)
 - [How the simulation works](#how-the-simulation-works)
-- [Using it in a classroom or workshop](#using-it-in-a-classroom-or-workshop)
 - [Project structure](#project-structure)
 - [Limitations](#limitations)
 - [Contributing](#contributing)
@@ -87,16 +83,6 @@ Key dynamics:
 | **Limits to growth** | Tourism expansion damages the habitat it depends on |
 | **Social feedbacks** | Low wellbeing and low trust erode compliance and push pressure back up |
 
-## Using it in a classroom or workshop
-
-- **Time**: about 20–30 minutes to play, plus 20–30 minutes of debrief.
-- **Format**: individuals, pairs or teams. For groups, have each team agree on one choice per round and record a shared prediction.
-- **Before the debrief**, ask teams: *What surprised you? Which decision looked best after one year but worse after five?*
-- **During the debrief**, have teams name the archetypes in their own run, then compare timelines across teams. Because choices differ, the charts will too.
-- **After**, use the generated plan and PDF as a take-home artefact or assessment evidence.
-
-Suggested discussion questions are built into each archetype card.
-
 ## Customising the game
 
 Everything lives in `index.html`. Look for these parts of the `<script>` block:
@@ -124,7 +110,7 @@ REM_221_Systems_surprises_simulation/
 
 - Indicators and outcomes are **illustrative**. They are not calibrated to any real fishery and must not be used to make real management decisions.
 - The model is deterministic: the same choices always give the same result. This is intentional so teams can compare runs, but it means there is no random variation.
-- Saving to PDF uses the browser's print dialog. If the page is opened inside an embedded preview, printing may be blocked, so open the file in a normal browser tab.
+- Saving to PDF uses the browser's print dialogue. If the page is opened inside an embedded preview, printing may be blocked, so open the file in a normal browser tab.
 
 
 ## License
