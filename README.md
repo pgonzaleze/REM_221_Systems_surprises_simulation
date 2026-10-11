@@ -1,5 +1,3 @@
-# REM_221_Systems_surprises_simulation
-
 # Hollow Bay: When good solutions create new problems
 
 An interactive systems-thinking simulation for the classroom, workshops and self-study. You are the coastal management team of a fictional fishing community. Over 20 simulated years you make four decisions, one every five years, to protect fish stocks, sustain community wellbeing and manage a limited public budget.
