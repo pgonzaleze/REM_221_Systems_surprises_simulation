@@ -141,8 +141,19 @@ button,select,input,textarea{font:inherit}button{cursor:pointer;border:0;border-
   <h3 style="margin-top:22px">Your decisions</h3><div id="decisionLog"></div>
   <div class="controls"><button class="secondary" id="downloadBtn">Save report as PDF</button><button class="primary" id="restartBtn">Play again</button></div>
 </main>
-<div class="footer">Hollow Bay is a fictional teaching simulation. Indicators and outcomes are simplified for classroom discussion, not predictions for a real fishery.</div>
+<div class="footer">
+  Hollow Bay is a fictional teaching simulation. Indicators and outcomes
+  are simplified for classroom discussion, not predictions for a real fishery.
+  <br>
+  Source code:
+  <a href="https://github.com/pgonzaleze/REM_221_Systems_surprises_simulation"
+     target="_blank"
+     rel="noopener noreferrer">
+    View the project repository on GitHub
+  </a>
 </div>
+</div>
+
 <script>
 (() => {
 const initial={budget:100,fish:70,habitat:65,wellbeing:60,year:0,round:0,compliance:70,pressure:58,trust:60,displaced:0,capacity:0,tourism:false,alt:0};
