@@ -25,7 +25,7 @@ Your decisions have delayed effects, feedback loops and unintended consequences,
 
 ## Why this exists
 
-Many real-world problems get worse when we treat only the most visible symptom. Blue Bay lets learners experience that firsthand, then gives them the vocabulary to explain what happened.
+Many real-world problems get worse when we treat only the most visible symptom. Hollow Bay lets learners experience that firsthand, then gives them the vocabulary to explain what happened.
 
 By playing, learners practise recognising:
 
