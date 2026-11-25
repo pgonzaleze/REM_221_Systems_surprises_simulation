@@ -99,15 +99,6 @@ Everything lives in `index.html`. Look for these parts of the `<script>` block:
 
 To adapt the scenario, for example to a river, forest or urban setting, change the text in `rounds` and the explanatory strings, then adjust the numbers in `applyDecision` and the loop. If you add a new choice `id`, add a matching `case` in `applyDecision`.
 
-## Project structure
-
-```
-REM_221_Systems_surprises_simulation/
-├── index.html   # The whole game: HTML, CSS and JavaScript
-├── README.md
-└── LICENSE
-```
-
 ## Limitations
 
 - Indicators and outcomes are **illustrative**. They are not calibrated to any real fishery and must not be used to make real management decisions.
